@@ -1,0 +1,22 @@
+[Unit]
+Description=WebRTC server
+Documentation=man:webrtc2sip
+After=network.target rtpproxy.service
+
+[Service]
+Type=forking
+User=root
+Group=root
+RuntimeDirectory=webrtc2sip
+RuntimeDirectoryMode=775
+Environment=P_MEMORY=32 S_MEMORY=32
+EnvironmentFile=-/etc/sysconfig/webrtc2sip
+PermissionsStartOnly=yes
+ExecStart=/usr/bin/screen -dmS webrtc2sip webrtc2sip --config=/etc/webrtc2sip.xml
+ExecStop=/usr/bin/pkill -f "webrtc2sip"
+Restart=always
+TimeoutStopSec=30s
+LimitNOFILE=262144
+
+[Install]
+WantedBy=multi-user.target
